@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { WorkspaceLayout } from "@/components/layout/WorkspaceLayout";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -48,6 +49,12 @@ const drafts = [
 ];
 
 export default function Create() {
+  const navigate = useNavigate();
+
+  const startWorkflow = (type: string) => {
+    navigate(`/create/workflow/${type}`);
+  };
+
   return (
     <WorkspaceLayout workspace="create">
       <div className="container mx-auto max-w-6xl px-6 py-12">
@@ -68,6 +75,7 @@ export default function Create() {
               return (
                 <Card
                   key={workflow.id}
+                  onClick={() => startWorkflow(workflow.id)}
                   className="group relative overflow-hidden border-border-light bg-card transition-all duration-200 hover:scale-[1.02] hover:border-primary/20 hover:shadow-lg cursor-pointer"
                   style={{ animationDelay: `${150 + index * 50}ms` }}
                 >

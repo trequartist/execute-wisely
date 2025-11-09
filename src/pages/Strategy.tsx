@@ -2,9 +2,50 @@ import { WorkspaceLayout } from "@/components/layout/WorkspaceLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Calendar as CalendarIcon, Dna, RefreshCw } from "lucide-react";
+import { BookOpen, Calendar as CalendarIcon, Dna, RefreshCw, Target, Zap, TrendingUp } from "lucide-react";
+import { PlaybookCard } from "@/components/workspace/PlaybookCard";
+import { PlayCard } from "@/components/workspace/PlayCard";
+import { toast } from "sonner";
+
+const activePlays = [
+  {
+    id: "1",
+    icon: Target,
+    title: "Problem-Solution Framework",
+    description: "Address pain points with actionable solutions",
+    performance: { impressions: 12500, engagement: 8.2 },
+  },
+  {
+    id: "2",
+    icon: Zap,
+    title: "Quick Win Tactics",
+    description: "Share immediately actionable tips",
+    performance: { impressions: 9800, engagement: 12.5 },
+  },
+  {
+    id: "3",
+    icon: TrendingUp,
+    title: "Industry Trend Analysis",
+    description: "Position as thought leader on emerging trends",
+    performance: { impressions: 15200, engagement: 6.8 },
+  },
+];
 
 export default function Strategy() {
+  const handleViewPlaybook = (type: string) => {
+    toast.info(`${type} playbook viewer coming soon`);
+  };
+
+  const handleViewPlay = (playId: string) => {
+    toast.info("Play details coming soon");
+  };
+
+  const handleRegeneratePlaybooks = () => {
+    toast.success("Regenerating playbooks...", {
+      description: "This will take a few minutes",
+    });
+  };
+
   return (
     <WorkspaceLayout workspace="strategy">
       <div className="container mx-auto max-w-6xl px-6 py-12">
@@ -33,29 +74,36 @@ export default function Strategy() {
 
           <TabsContent value="playbooks" className="space-y-6">
             <div className="grid gap-4 md:grid-cols-2">
-              <Card className="border-border-light">
-                <CardHeader>
-                  <CardTitle>Blog Playbook</CardTitle>
-                  <CardDescription>12 active plays • Last updated 3 days ago</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="outline" className="w-full">
-                    View Playbook
-                  </Button>
-                </CardContent>
-              </Card>
+              <PlaybookCard
+                type="blog"
+                activePlays={12}
+                lastUpdated="3 days ago"
+                performance={{ change: 15, trend: "up" }}
+                onClick={() => handleViewPlaybook("Blog")}
+              />
+              <PlaybookCard
+                type="linkedin"
+                activePlays={8}
+                lastUpdated="1 week ago"
+                performance={{ change: -3, trend: "down" }}
+                onClick={() => handleViewPlaybook("LinkedIn")}
+              />
+            </div>
 
-              <Card className="border-border-light">
-                <CardHeader>
-                  <CardTitle>LinkedIn Playbook</CardTitle>
-                  <CardDescription>8 active plays • Last updated 1 week ago</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button variant="outline" className="w-full">
-                    View Playbook
-                  </Button>
-                </CardContent>
-              </Card>
+            <div>
+              <h3 className="text-label mb-4">YOUR ACTIVE PLAYS</h3>
+              <div className="grid gap-4 md:grid-cols-3">
+                {activePlays.map((play) => (
+                  <PlayCard
+                    key={play.id}
+                    icon={play.icon}
+                    title={play.title}
+                    description={play.description}
+                    performance={play.performance}
+                    onClick={() => handleViewPlay(play.id)}
+                  />
+                ))}
+              </div>
             </div>
 
             <Card className="border-border-light">
@@ -66,7 +114,7 @@ export default function Strategy() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="gap-2">
+                <Button className="gap-2" onClick={handleRegeneratePlaybooks}>
                   <RefreshCw className="h-4 w-4" />
                   Regenerate All Playbooks
                 </Button>

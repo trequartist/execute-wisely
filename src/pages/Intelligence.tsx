@@ -3,8 +3,58 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Search, Activity, BarChart2, Eye, Plus } from "lucide-react";
+import { ResearchCard } from "@/components/workspace/ResearchCard";
+import { toast } from "sonner";
+
+const activeResearch = [
+  {
+    id: "1",
+    title: "Market Analysis: AI in Healthcare 2025",
+    status: "running" as const,
+    progress: 67,
+    sources: 42,
+    estimatedTime: "~15 min",
+  },
+];
+
+const completedResearch = [
+  {
+    id: "2",
+    title: "Competitive Analysis: Healthcare Tech Startups",
+    status: "completed" as const,
+    date: "2 days ago",
+    keyFindings: [
+      "85% of healthcare startups are integrating AI capabilities",
+      "Patient data privacy is the #1 concern across all segments",
+      "Telemedicine adoption increased 300% in the last 18 months",
+    ],
+  },
+  {
+    id: "3",
+    title: "Content Gap Analysis: Medical Device Industry",
+    status: "completed" as const,
+    date: "1 week ago",
+    keyFindings: [
+      "Lack of mid-funnel content for decision makers",
+      "High demand for regulatory compliance guides",
+      "Opportunity in case study content",
+    ],
+  },
+];
 
 export default function Intelligence() {
+  const handleNewResearch = () => {
+    toast.info("Research request form coming soon");
+  };
+
+  const handleViewReport = (id: string) => {
+    toast.info("Research report viewer coming soon");
+  };
+
+  const handleExport = (id: string) => {
+    toast.success("Research exported successfully");
+  };
+
   return (
     <WorkspaceLayout workspace="intelligence">
       <div className="container mx-auto max-w-6xl px-6 py-12">
@@ -43,16 +93,38 @@ export default function Intelligence() {
                     <CardTitle>Research Library</CardTitle>
                     <CardDescription>Access your market research and analysis</CardDescription>
                   </div>
-                  <Button className="gap-2">
+                  <Button className="gap-2" onClick={handleNewResearch}>
                     <Plus className="h-4 w-4" />
                     New Research
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="flex h-[400px] items-center justify-center text-muted-foreground">
-                No research reports yet. Start by creating a new research request.
-              </CardContent>
             </Card>
+
+            {activeResearch.length > 0 && (
+              <div>
+                <h3 className="text-label mb-4">ACTIVE RESEARCH</h3>
+                <div className="grid gap-4">
+                  {activeResearch.map((research) => (
+                    <ResearchCard key={research.id} {...research} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div>
+              <h3 className="text-label mb-4">COMPLETED RESEARCH</h3>
+              <div className="grid gap-4 md:grid-cols-2">
+                {completedResearch.map((research) => (
+                  <ResearchCard
+                    key={research.id}
+                    {...research}
+                    onView={() => handleViewReport(research.id)}
+                    onExport={() => handleExport(research.id)}
+                  />
+                ))}
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="diagnostics">
